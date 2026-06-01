@@ -53,7 +53,6 @@ export async function createDealAction(formData: FormData) {
   return { success: true, error: null };
 }
 
-// ---- NOUVELLE ACTION : METTRE À JOUR LES PROPRIÉTÉS DU DEAL ----
 export async function updateDealPropertiesAction(dealId: number, formData: FormData) {
   const subject = formData.get("subject") as string;
   const priority = formData.get("priority") as string;
@@ -83,12 +82,25 @@ export async function updateDealPropertiesAction(dealId: number, formData: FormD
   return { success: true, error: null };
 }
 
-// ---- ACTIONS POUR LA TIMELINE INTERACTIVE ----
-export async function addTimelineEventAction(dealId: number, action: string, eventDate: string, position: number) {
+// ---- ACTIONS AVANCÉES DE LA TIMELINE DE TÂCHES ----
+
+export async function addTimelineEventAction(dealId: number, action: string, eventDate: string, position: number, taskPriority: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("deal_timeline").insert([
-    { deal_id: dealId, action, event_date: eventDate, position }
+    { deal_id: dealId, action, event_date: eventDate, position, task_priority: taskPriority, completed: false }
   ]);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath(`/comptes/deals/${dealId}`);
+  return { success: true, error: null };
+}
+
+export async function toggleTimelineEventCompletionAction(dealId: number, eventId: number, currentStatus: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("deal_timeline")
+    .update({ completed: !currentStatus })
+    .eq("id", eventId);
 
   if (error) return { success: false, error: error.message };
   revalidatePath(`/comptes/deals/${dealId}`);
@@ -104,14 +116,19 @@ export async function deleteTimelineEventAction(dealId: number, eventId: number)
   return { success: true, error: null };
 }
 
-export async function saveTimelineOrderAction(dealId: number, events: { id: number; action: string; event_date: string; position: number }[]) {
+export async function saveTimelineOrderAction(dealId: number, events: { id: number; action: string; event_date: string; position: number; task_priority: string }[]) {
   const supabase = await createClient();
   
   try {
     for (const event of events) {
       const { error } = await supabase
         .from("deal_timeline")
-        .update({ position: event.position, action: event.action, event_date: event.event_date })
+        .update({ 
+          position: event.position, 
+          action: event.action, 
+          event_date: event.event_date,
+          task_priority: event.task_priority 
+        })
         .eq("id", event.id);
       
       if (error) throw error;
