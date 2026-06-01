@@ -2,6 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { deleteDealAction } from "@/app/actions";
+// IMPORT DU NOUVEAU BOUTON CONTEXTUEL 👇
+import CreateDealButtonLocal from "@/app/components/CreateDealButtonLocal";
 
 export default async function CompteDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = await createClient();
@@ -29,7 +31,7 @@ export default async function CompteDetailPage({ params }: { params: Promise<{ i
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 animate-in fade-in duration-300">
       <header className="space-y-4">
         <div>
           <Link href="/comptes" className="text-[13px] font-semibold text-[#0071e3] hover:underline inline-flex items-center gap-1">
@@ -40,7 +42,11 @@ export default async function CompteDetailPage({ params }: { params: Promise<{ i
       </header>
 
       <div className="space-y-6">
-        <h2 className="text-lg font-bold text-[#1d1d1f]">Suivi des Deals en cours</h2>
+        {/* Titre et Bouton alignés sur une ligne fluide parfaite à la Apple */}
+        <div className="flex justify-between items-center border-b border-black/[0.04] pb-2">
+          <h2 className="text-lg font-bold text-[#1d1d1f]">Suivi des Deals en cours</h2>
+          <CreateDealButtonLocal compteId={compteId} />
+        </div>
         
         {deals?.map((deal: any) => (
           <div key={deal.id} className="group relative bg-white p-6 rounded-2xl border border-black/[0.06] shadow-sm space-y-4 hover:border-[#0071e3] apple-curve hover:shadow-md">
@@ -91,8 +97,10 @@ export default async function CompteDetailPage({ params }: { params: Promise<{ i
         ))}
 
         {(!deals || deals.length === 0) && (
-          <div className="bg-white rounded-2xl p-12 text-center text-[#86868b] border border-dashed">
-            Aucun deal en cours pour ce compte client.
+          /* Ajout du bouton d'appel à l'action directement centré au milieu du bloc vide */
+          <div className="bg-white rounded-2xl p-12 text-center text-[#86868b] border border-dashed border-black/[0.08] flex flex-col items-center justify-center gap-5">
+            <p className="text-[15px] text-[#86868b] font-medium">Aucun deal en cours pour ce compte client.</p>
+            <CreateDealButtonLocal compteId={compteId} />
           </div>
         )}
       </div>
