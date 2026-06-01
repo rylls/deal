@@ -205,31 +205,31 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
         )}
       </div>
 
-      {/* PIPELINE DE PROGRESSION STRATÉGIQUE (STYLE APPLE GRAPHIC) */}
+      {/* PIPELINE DE PROGRESSION STRATÉGIQUE (ALIGNEMENT PERFECT CORRIGÉ) */}
       <div className="relative max-w-xl mx-auto py-4">
-        {/* Ligne d'arrière-plan continue grise */}
-        <div className="absolute top-[18px] left-[40px] right-[40px] h-[3px] bg-black/[0.06] z-0 rounded-full" />
+        {/* Ligne d'arrière-plan continue grise - Calée à top-5 (centre vertical exact d'un rond de 40px) */}
+        <div className="absolute top-5 left-10 right-10 h-[3px] bg-black/[0.06] z-0 rounded-full" />
         
-        {/* Ligne de progression active bleue animée */}
+        {/* Ligne de progression active bleue animée - Alignée à top-5 */}
         <div 
-          className="absolute top-[18px] left-[40px] right-[40px] h-[3px] bg-gradient-to-r from-[#0071e3] to-[#42a5f5] z-0 rounded-full apple-curve shadow-[0_0_12px_rgba(0,113,227,0.3)] origin-left" 
+          className="absolute top-5 left-10 right-10 h-[3px] bg-gradient-to-r from-[#0071e3] to-[#42a5f5] z-0 rounded-full apple-curve shadow-[0_0_12px_rgba(0,113,227,0.3)] origin-left" 
           style={{
             transform: `scaleX(${activeStep === "qualification" ? 0 : activeStep === "estimation" ? 0.5 : 1})`,
             transition: "transform 450ms cubic-bezier(0.16, 1, 0.3, 1)"
           }}
         />
 
-        {/* Conteneur des ronds jalons alignés */}
-        <div className="relative flex justify-between items-center z-10">
+        {/* Conteneur des jalons */}
+        <div className="relative flex justify-between items-start z-10">
           {/* Étape 1 : Qualification */}
           <button 
             type="button"
             onClick={() => setActiveStep("qualification")}
-            className="flex flex-col items-center gap-2 group cursor-pointer focus:outline-none w-20 text-center"
+            className="flex flex-col items-center gap-2 group focus:outline-none w-24 text-center cursor-pointer"
           >
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
               activeStep === "qualification" 
-                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-110 font-black shadow-[0_4px_12px_rgba(0,0,0,0.08)]" 
+                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-105 font-black shadow-sm" 
                 : "bg-[#0071e3] border-[#0071e3] text-white"
             }`}>
               {activeStep === "qualification" ? "1" : "✓"}
@@ -241,15 +241,15 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
             </span>
           </button>
 
-          {/* Étape 2 : Estimation / Chiffrage */}
+          {/* Étape 2 : Chiffrage */}
           <button 
             type="button"
             onClick={() => setActiveStep("estimation")}
-            className="flex flex-col items-center gap-2 group cursor-pointer focus:outline-none w-20 text-center"
+            className="flex flex-col items-center gap-2 group focus:outline-none w-24 text-center cursor-pointer"
           >
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
               activeStep === "estimation" 
-                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-110 font-black shadow-[0_4px_12px_rgba(0,0,0,0.08)]" 
+                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-105 font-black shadow-sm" 
                 : activeStep === "recap"
                   ? "bg-[#0071e3] border-[#0071e3] text-white"
                   : "bg-white border-zinc-200 text-zinc-400"
@@ -267,11 +267,11 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
           <button 
             type="button"
             onClick={() => setActiveStep("recap")}
-            className="flex flex-col items-center gap-2 group cursor-pointer focus:outline-none w-20 text-center"
+            className="flex flex-col items-center gap-2 group focus:outline-none w-24 text-center cursor-pointer"
           >
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
               activeStep === "recap" 
-                ? "bg-gradient-to-tr from-[#0071e3] to-[#42a5f5] border-transparent text-white ring-4 ring-[#0071e3]/10 scale-110 font-black shadow-[0_4px_12px_rgba(0,113,227,0.2)]" 
+                ? "bg-gradient-to-tr from-[#0071e3] to-[#42a5f5] border-transparent text-white ring-4 ring-[#0071e3]/10 scale-105 font-black shadow-[0_4px_12px_rgba(0,113,227,0.2)]" 
                 : "bg-white border-zinc-200 text-zinc-400"
             }`}>
               3
@@ -308,7 +308,7 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
             </form>
           </div>
 
-          {/* GESTIONNAIRE DE SUIVI GRAPHIQUE ET CHRONOLOGIQUE */}
+          {/* GESTIONNAIRE DE SUIVI GRAPHIQUE (FRiSE RESTRUCTURÉE POUR LE CENTRAGE) */}
           <div className="bg-white border border-black/[0.06] rounded-2xl p-8 shadow-sm space-y-6">
             <div>
               <h2 className="text-xl font-bold text-[#1d1d1f]">Plan d'action & Suivi analytique</h2>
@@ -316,7 +316,10 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
             </div>
 
             {timelineEvents.length > 0 ? (
-              <div className="relative border-l border-black/[0.08] pl-6 ml-3 space-y-6">
+              <div className="relative pl-8 space-y-6">
+                {/* Ligne verticale continue géométriquement isolée au pixel près */}
+                <div className="absolute top-2 bottom-2 left-[11px] w-[2px] bg-black/[0.08] z-0" />
+
                 {timelineEvents.map((event, index) => {
                   const reminder = getReminderTag(event.event_date, event.completed);
                   const colorConfig = appleBlockColors[index % appleBlockColors.length];
@@ -328,56 +331,60 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
                       onDragStart={() => handleDragStart(index)}
                       onDragOver={(e) => handleDragOver(e, index)}
                       onDragEnd={handleDragEnd}
-                      className={`relative border rounded-2xl p-5 flex flex-col gap-4 cursor-grab active:cursor-grabbing apple-curve shadow-sm ${colorConfig.bg} ${event.completed ? "opacity-50" : ""}`}
+                      className="relative group z-10"
                     >
+                      {/* Rond d'état parfaitement superposé au centre de la ligne et en face de la 1ère ligne de carte (top-[24px]) */}
                       <button
                         onClick={() => handleToggleComplete(event.id, event.completed)}
-                        className={`absolute -left-[31px] top-7 w-4 h-4 rounded-full border-2 border-white shadow-sm apple-curve cursor-pointer ${event.completed ? "bg-green-500" : "bg-zinc-300 hover:bg-[#0071e3]"}`}
+                        className={`absolute left-[4px] top-[24px] w-4 h-4 rounded-full border-2 border-white shadow-sm apple-curve z-20 cursor-pointer ${event.completed ? "bg-green-500" : "bg-zinc-300 hover:bg-[#0071e3]"}`}
                       ></button>
 
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/[0.04] pb-3">
-                        <div className="flex items-center gap-3 flex-1 min-w-0">
-                          <span className="text-xs bg-white border border-black/[0.05] text-[#1d1d1f] w-6 h-6 rounded-md flex items-center justify-center font-bold shrink-0">
-                            {index + 1}
-                          </span>
-                          <input 
-                            type="text" 
-                            value={event.action} 
-                            onChange={(e) => handleLocalChange(index, "action", e.target.value)}
-                            className={`bg-transparent border-b border-transparent focus:outline-none text-[15px] font-extrabold text-[#1d1d1f] flex-1 min-w-[200px] ${colorConfig.focus} ${event.completed ? "line-through opacity-50" : ""}`}
-                          />
+                      {/* Corps de carte décalé (ml-6) pour dégager l'axe de la ligne */}
+                      <div className={`ml-6 border rounded-2xl p-5 flex flex-col gap-4 shadow-sm ${colorConfig.bg} ${event.completed ? "opacity-50" : ""}`}>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/[0.04] pb-3">
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <span className="text-xs bg-white border border-black/[0.05] text-[#1d1d1f] w-6 h-6 rounded-md flex items-center justify-center font-bold shrink-0">
+                              {index + 1}
+                            </span>
+                            <input 
+                              type="text" 
+                              value={event.action} 
+                              onChange={(e) => handleLocalChange(index, "action", e.target.value)}
+                              className={`bg-transparent border-b border-transparent focus:outline-none text-[15px] font-extrabold text-[#1d1d1f] flex-1 min-w-[200px] ${colorConfig.focus} ${event.completed ? "line-through opacity-50" : ""}`}
+                            />
+                          </div>
+
+                          <div className="flex items-center gap-3 shrink-0">
+                            <input 
+                              type="date" 
+                              value={event.event_date} 
+                              onChange={(e) => handleLocalChange(index, "event_date", e.target.value)}
+                              className="bg-white border border-black/[0.06] rounded-lg text-xs font-bold text-[#1d1d1f] px-2 py-1 focus:outline-none"
+                            />
+                            <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${reminder.classes}`}>
+                              {reminder.label}
+                            </span>
+                            <button 
+                              onClick={() => handleDeleteBlock(event.id)}
+                              className="text-xs font-bold text-red-500 hover:bg-red-50 px-2 py-1 rounded-lg apple-curve cursor-pointer"
+                            >
+                              🗑️
+                            </button>
+                          </div>
                         </div>
 
-                        <div className="flex items-center gap-3 shrink-0">
-                          <input 
-                            type="date" 
-                            value={event.event_date} 
-                            onChange={(e) => handleLocalChange(index, "event_date", e.target.value)}
-                            className="bg-white border border-black/[0.06] rounded-lg text-xs font-bold text-[#1d1d1f] px-2 py-1 focus:outline-none"
+                        <div className="space-y-1.5">
+                          <label className="block text-[10px] font-extrabold uppercase tracking-widest text-black/40">
+                            Notes de suivi / Compte-rendu d'étape
+                          </label>
+                          <textarea
+                            rows={3}
+                            value={event.comment || ""}
+                            onChange={(e) => handleLocalChange(index, "comment", e.target.value)}
+                            placeholder="Saisissez ici les détails de l'avancement, les retours du client ou les points de blocage rencontrés..."
+                            className="w-full p-3 bg-white border border-black/[0.06] rounded-xl text-xs font-medium text-[#1d1d1f] focus:outline-none focus:border-[#0071e3] shadow-inner placeholder-zinc-400"
                           />
-                          <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${reminder.classes}`}>
-                            {reminder.label}
-                          </span>
-                          <button 
-                            onClick={() => handleDeleteBlock(event.id)}
-                            className="text-xs font-bold text-red-500 hover:bg-red-50 px-2 py-1 rounded-lg apple-curve cursor-pointer"
-                          >
-                            🗑️
-                          </button>
                         </div>
-                      </div>
-
-                      <div className="space-y-1.5">
-                        <label className="block text-[10px] font-extrabold uppercase tracking-widest text-black/40">
-                          Notes de suivi / Compte-rendu d'étape
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={event.comment || ""}
-                          onChange={(e) => handleLocalChange(index, "comment", e.target.value)}
-                          placeholder="Saisissez ici les détails de l'avancement, les retours du client ou les points de blocage rencontrés..."
-                          className="w-full p-3 bg-white border border-black/[0.06] rounded-xl text-xs font-medium text-[#1d1d1f] focus:outline-none focus:border-[#0071e3] shadow-inner placeholder-zinc-400"
-                        />
                       </div>
 
                     </div>

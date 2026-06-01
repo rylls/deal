@@ -48,24 +48,34 @@ export default function Header({ comptes }: { comptes: Compte[] }) {
     <>
       <header className="h-20 flex items-center justify-end px-16 w-full absolute top-0 right-0 z-20 pointer-events-none">
         <div className="relative pointer-events-auto">
+          {/* Bouton Plus avec icône SVG parfaitement centrée */}
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="bg-[#0071e3] text-white w-9 h-9 rounded-full flex items-center justify-center text-xl font-light hover:bg-[#0077ed] shadow-md cursor-pointer apple-curve apple-active-press"
+            className="bg-[#0071e3] text-white w-9 h-9 rounded-full flex items-center justify-center hover:bg-[#0077ed] shadow-md cursor-pointer apple-curve apple-active-press"
           >
-            +
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              strokeWidth={2.5} 
+              stroke="currentColor" 
+              className="w-4 h-4 shrink-0"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
           </button>
 
           {showDropdown && (
             <div className="absolute right-0 mt-2 w-56 bg-white/85 backdrop-blur-xl border border-black/[0.08] rounded-2xl shadow-2xl py-1.5 z-30">
               <button
                 onClick={() => { setModalType("compte"); setShowDropdown(false); }}
-                className="w-full text-left px-5 py-3 text-[13px] text-[#1d1d1f] hover:bg-[#0071e3] hover:text-white transition-colors font-medium"
+                className="w-full text-left px-5 py-3 text-[13px] text-[#1d1d1f] hover:bg-[#0071e3] hover:text-white transition-colors cursor-pointer font-medium"
               >
                 Créer un compte
               </button>
               <button
                 onClick={() => { setModalType("deal"); setShowDropdown(false); }}
-                className="w-full text-left px-5 py-3 text-[13px] text-[#1d1d1f] hover:bg-[#0071e3] hover:text-white transition-colors font-medium"
+                className="w-full text-left px-5 py-3 text-[13px] text-[#1d1d1f] hover:bg-[#0071e3] hover:text-white transition-colors cursor-pointer font-medium"
               >
                 Créer un deal
               </button>
@@ -79,7 +89,7 @@ export default function Header({ comptes }: { comptes: Compte[] }) {
           <div className="bg-white/95 border border-black/[0.06] rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5 animate-in zoom-in-95 duration-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-lg font-bold text-[#1d1d1f]">
-                {modalType === "compte" ? "Nouveau Compte" : "Nouveau Deal"}
+                {modalType === "compte" ? "Nouveau Coumpte" : "Nouveau Deal"}
               </h3>
               <button
                 onClick={() => { setModalType(null); setError(null); }}
@@ -102,7 +112,7 @@ export default function Header({ comptes }: { comptes: Compte[] }) {
                   <input type="text" name="revenue" placeholder="Ex: 500k€" className="w-full p-2.5 bg-black/[0.02] border border-black/[0.06] rounded-xl text-[13px]" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-[#86868b] uppercase tracking-wider">Secteur d'activité</label>
+                  <label className="text-[10px] font-bold text-[#86868b] uppercase tracking-wider">Sextieur d'activité</label>
                   <input type="text" name="sector" placeholder="Ex: Digital" className="w-full p-2.5 bg-black/[0.02] border border-black/[0.06] rounded-xl text-[13px]" />
                 </div>
                 <div className="space-y-1">
