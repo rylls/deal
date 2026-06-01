@@ -20,7 +20,7 @@ export default async function Home() {
         </header>
 
         <div className="space-y-4">
-          {deals?.map((deal) => (
+          {deals?.map((deal: any) => (
             <div 
               key={deal.id} 
               className="bg-white p-6 rounded-xl shadow-sm border border-zinc-200 flex flex-col gap-2"
