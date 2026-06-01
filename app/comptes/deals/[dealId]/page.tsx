@@ -205,11 +205,84 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
         )}
       </div>
 
-      {/* STEPPER DE NAVIGATION ACCESSIBLE */}
-      <div className="flex items-center justify-center bg-white border border-black/[0.05] p-2.5 rounded-2xl shadow-sm max-w-xs mx-auto">
-        <button onClick={() => setActiveStep("qualification")} className={`px-5 py-2 rounded-xl text-[12px] font-bold apple-curve ${activeStep === "qualification" ? "bg-[#0071e3] text-white" : "text-[#86868b] hover:bg-black/[0.02]"}`}>
-          📄 Cadencier d'Actions
-        </button>
+      {/* PIPELINE DE PROGRESSION STRATÉGIQUE (STYLE APPLE GRAPHIC) */}
+      <div className="relative max-w-xl mx-auto py-4">
+        {/* Ligne d'arrière-plan continue grise */}
+        <div className="absolute top-[18px] left-[40px] right-[40px] h-[3px] bg-black/[0.06] z-0 rounded-full" />
+        
+        {/* Ligne de progression active bleue animée */}
+        <div 
+          className="absolute top-[18px] left-[40px] right-[40px] h-[3px] bg-gradient-to-r from-[#0071e3] to-[#42a5f5] z-0 rounded-full apple-curve shadow-[0_0_12px_rgba(0,113,227,0.3)] origin-left" 
+          style={{
+            transform: `scaleX(${activeStep === "qualification" ? 0 : activeStep === "estimation" ? 0.5 : 1})`,
+            transition: "transform 450ms cubic-bezier(0.16, 1, 0.3, 1)"
+          }}
+        />
+
+        {/* Conteneur des ronds jalons alignés */}
+        <div className="relative flex justify-between items-center z-10">
+          {/* Étape 1 : Qualification */}
+          <button 
+            type="button"
+            onClick={() => setActiveStep("qualification")}
+            className="flex flex-col items-center gap-2 group cursor-pointer focus:outline-none w-20 text-center"
+          >
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
+              activeStep === "qualification" 
+                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-110 font-black shadow-[0_4px_12px_rgba(0,0,0,0.08)]" 
+                : "bg-[#0071e3] border-[#0071e3] text-white"
+            }`}>
+              {activeStep === "qualification" ? "1" : "✓"}
+            </div>
+            <span className={`text-[12px] font-bold tracking-tight apple-curve ${
+              activeStep === "qualification" ? "text-[#1d1d1f] font-extrabold" : "text-[#86868b] group-hover:text-[#1d1d1f]"
+            }`}>
+              Qualification
+            </span>
+          </button>
+
+          {/* Étape 2 : Estimation / Chiffrage */}
+          <button 
+            type="button"
+            onClick={() => setActiveStep("estimation")}
+            className="flex flex-col items-center gap-2 group cursor-pointer focus:outline-none w-20 text-center"
+          >
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
+              activeStep === "estimation" 
+                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-110 font-black shadow-[0_4px_12px_rgba(0,0,0,0.08)]" 
+                : activeStep === "recap"
+                  ? "bg-[#0071e3] border-[#0071e3] text-white"
+                  : "bg-white border-zinc-200 text-zinc-400"
+            }`}>
+              {activeStep === "recap" ? "✓" : "2"}
+            </div>
+            <span className={`text-[12px] font-bold tracking-tight apple-curve ${
+              activeStep === "estimation" ? "text-[#1d1d1f] font-extrabold" : "text-[#86868b] group-hover:text-[#1d1d1f]"
+            }`}>
+              Chiffrage
+            </span>
+          </button>
+
+          {/* Étape 3 : Récapitulatif */}
+          <button 
+            type="button"
+            onClick={() => setActiveStep("recap")}
+            className="flex flex-col items-center gap-2 group cursor-pointer focus:outline-none w-20 text-center"
+          >
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
+              activeStep === "recap" 
+                ? "bg-gradient-to-tr from-[#0071e3] to-[#42a5f5] border-transparent text-white ring-4 ring-[#0071e3]/10 scale-110 font-black shadow-[0_4px_12px_rgba(0,113,227,0.2)]" 
+                : "bg-white border-zinc-200 text-zinc-400"
+            }`}>
+              3
+            </div>
+            <span className={`text-[12px] font-bold tracking-tight apple-curve ${
+              activeStep === "recap" ? "text-[#1d1d1f] font-extrabold" : "text-[#86868b] group-hover:text-[#1d1d1f]"
+            }`}>
+              Récapitulatif
+            </span>
+          </button>
+        </div>
       </div>
 
       {activeStep === "qualification" ? (
@@ -235,7 +308,7 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
             </form>
           </div>
 
-          {/* GRAPHIQUE CHRONOLOGIQUE À BRIQUES DE COULEUR ET COMMENTAIRES CONSÉQUENTS */}
+          {/* GESTIONNAIRE DE SUIVI GRAPHIQUE ET CHRONOLOGIQUE */}
           <div className="bg-white border border-black/[0.06] rounded-2xl p-8 shadow-sm space-y-6">
             <div>
               <h2 className="text-xl font-bold text-[#1d1d1f]">Plan d'action & Suivi analytique</h2>
@@ -246,7 +319,7 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
               <div className="relative border-l border-black/[0.08] pl-6 ml-3 space-y-6">
                 {timelineEvents.map((event, index) => {
                   const reminder = getReminderTag(event.event_date, event.completed);
-                  const colorConfig = appleBlockColors[index % appleBlockColors.length]; // Distribution des couleurs par brique
+                  const colorConfig = appleBlockColors[index % appleBlockColors.length];
 
                   return (
                     <div 
@@ -257,13 +330,11 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
                       onDragEnd={handleDragEnd}
                       className={`relative border rounded-2xl p-5 flex flex-col gap-4 cursor-grab active:cursor-grabbing apple-curve shadow-sm ${colorConfig.bg} ${event.completed ? "opacity-50" : ""}`}
                     >
-                      {/* Pastille interactive sur l'axe de temps */}
                       <button
                         onClick={() => handleToggleComplete(event.id, event.completed)}
                         className={`absolute -left-[31px] top-7 w-4 h-4 rounded-full border-2 border-white shadow-sm apple-curve cursor-pointer ${event.completed ? "bg-green-500" : "bg-zinc-300 hover:bg-[#0071e3]"}`}
                       ></button>
 
-                      {/* LIGNE 1 : INFOS MACRO & ACTIONS */}
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/[0.04] pb-3">
                         <div className="flex items-center gap-3 flex-1 min-w-0">
                           <span className="text-xs bg-white border border-black/[0.05] text-[#1d1d1f] w-6 h-6 rounded-md flex items-center justify-center font-bold shrink-0">
@@ -284,7 +355,7 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
                             onChange={(e) => handleLocalChange(index, "event_date", e.target.value)}
                             className="bg-white border border-black/[0.06] rounded-lg text-xs font-bold text-[#1d1d1f] px-2 py-1 focus:outline-none"
                           />
-                          <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${reminder.classes}`}>
+                          <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${reminder.classes}`}>
                             {reminder.label}
                           </span>
                           <button 
@@ -296,7 +367,6 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
                         </div>
                       </div>
 
-                      {/* LIGNE 2 : ZONE SUBSTANTIELLE DE COMMENTAIRES / DOSSIER */}
                       <div className="space-y-1.5">
                         <label className="block text-[10px] font-extrabold uppercase tracking-widest text-black/40">
                           Notes de suivi / Compte-rendu d'étape
@@ -333,7 +403,11 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
 
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="bg-white p-12 rounded-2xl border text-center text-[#86868b] shadow-sm font-medium text-xs">
+          🛠️ Le module de simulation et de génération de propositions financières de l'étape "Chiffrage" est prêt à être configuré.
+        </div>
+      )}
 
     </div>
   );
