@@ -18,6 +18,18 @@ export async function createCompteAction(formData: FormData) {
 
   if (error) return { success: false, error: error.message };
 
+  revalidatePath("/");
+  revalidatePath("/comptes");
+  return { success: true, error: null };
+}
+
+export async function deleteCompteAction(compteId: number) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("comptes").delete().eq("id", compteId);
+
+  if (error) return { success: false, error: error.message };
+
+  revalidatePath("/");
   revalidatePath("/comptes");
   return { success: true, error: null };
 }
@@ -48,6 +60,19 @@ export async function createDealAction(formData: FormData) {
 
   if (error) return { success: false, error: error.message };
 
+  revalidatePath("/");
+  revalidatePath("/comptes");
+  revalidatePath(`/comptes/${compteId}`);
+  return { success: true, error: null };
+}
+
+export async function deleteDealAction(dealId: number, compteId: number) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("deals").delete().eq("id", dealId);
+
+  if (error) return { success: false, error: error.message };
+
+  revalidatePath("/");
   revalidatePath("/comptes");
   revalidatePath(`/comptes/${compteId}`);
   return { success: true, error: null };
@@ -78,16 +103,15 @@ export async function updateDealPropertiesAction(dealId: number, formData: FormD
 
   if (error) return { success: false, error: error.message };
 
+  revalidatePath("/");
   revalidatePath(`/comptes/deals/${dealId}`);
   return { success: true, error: null };
 }
 
-// ---- ACTIONS AVANCÉES DE LA TIMELINE DE TÂCHES ----
-
 export async function addTimelineEventAction(dealId: number, action: string, eventDate: string, position: number, taskPriority: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("deal_timeline").insert([
-    { deal_id: dealId, action, event_date: eventDate, position, task_priority: taskPriority, completed: false }
+    { deal_id: dealId, action, event_date: eventDate, position, task_priority: taskPriority, completed: false, comment: "" }
   ]);
 
   if (error) return { success: false, error: error.message };
@@ -103,6 +127,7 @@ export async function toggleTimelineEventCompletionAction(dealId: number, eventI
     .eq("id", eventId);
 
   if (error) return { success: false, error: error.message };
+  revalidatePath("/");
   revalidatePath(`/comptes/deals/${dealId}`);
   return { success: true, error: null };
 }
@@ -116,7 +141,10 @@ export async function deleteTimelineEventAction(dealId: number, eventId: number)
   return { success: true, error: null };
 }
 
-export async function saveTimelineOrderAction(dealId: number, events: { id: number; action: string; event_date: string; position: number; task_priority: string }[]) {
+export async function saveTimelineOrderAction(
+  dealId: number, 
+  events: { id: number; action: string; event_date: string; position: number; task_priority: string; comment: string }[]
+) {
   const supabase = await createClient();
   
   try {
@@ -127,13 +155,15 @@ export async function saveTimelineOrderAction(dealId: number, events: { id: numb
           position: event.position, 
           action: event.action, 
           event_date: event.event_date,
-          task_priority: event.task_priority 
+          task_priority: event.task_priority,
+          comment: event.comment || ""
         })
         .eq("id", event.id);
       
       if (error) throw error;
     }
 
+    revalidatePath("/");
     revalidatePath(`/comptes/deals/${dealId}`);
     return { success: true, error: null };
   } catch (e: any) {

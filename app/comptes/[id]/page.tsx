@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { deleteDealAction } from "@/app/actions";
 
 export default async function CompteDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = await createClient();
@@ -42,9 +43,23 @@ export default async function CompteDetailPage({ params }: { params: Promise<{ i
         <h2 className="text-lg font-bold text-[#1d1d1f]">Suivi des Deals en cours</h2>
         
         {deals?.map((deal: any) => (
-          <Link href={`/comptes/deals/${deal.id}`} key={deal.id} className="block group">
-            <div className="bg-white p-6 rounded-2xl border border-black/[0.06] shadow-sm space-y-4 group-hover:border-[#0071e3] apple-curve group-hover:shadow-md">
-              <div className="flex justify-between items-start gap-4">
+          <div key={deal.id} className="group relative bg-white p-6 rounded-2xl border border-black/[0.06] shadow-sm space-y-4 hover:border-[#0071e3] apple-curve hover:shadow-md">
+            
+            {/* Formulaire de suppression rapide du deal */}
+            <form 
+              action={async () => {
+                "use server";
+                await deleteDealAction(deal.id, compteId);
+              }}
+              className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 apple-curve"
+            >
+              <button type="submit" className="text-xs text-red-500 hover:bg-red-50 p-2 rounded-xl cursor-pointer font-bold border border-red-100">
+                🗑️ Supprimer le deal
+              </button>
+            </form>
+
+            <Link href={`/comptes/deals/${deal.id}`} className="block space-y-4">
+              <div className="flex justify-between items-start gap-4 pr-32">
                 <div className="space-y-1">
                   <h3 className="font-bold text-[20px] tracking-tight text-[#1d1d1f] group-hover:text-[#0071e3] apple-curve">
                     {deal.subject}
@@ -52,7 +67,6 @@ export default async function CompteDetailPage({ params }: { params: Promise<{ i
                   {deal.city && <span className="inline-flex text-[11px] text-[#86868b] font-medium">📍 {deal.city}</span>}
                 </div>
                 
-                {/* Badge de priorité */}
                 <span className={`text-[11px] px-2.5 py-1 rounded-full font-bold border ${getPriorityColor(deal.priority)}`}>
                   {deal.priority || 'Medium'}
                 </span>
@@ -68,12 +82,12 @@ export default async function CompteDetailPage({ params }: { params: Promise<{ i
               </div>
               
               <div className="text-right">
-                <span className="text-xs text-[#0071e3] font-medium opacity-0 group-hover:opacity-100 apple-curve">
+                <span className="text-xs text-[#0071e3] font-bold opacity-0 group-hover:opacity-100 apple-curve">
                   Ouvrir l'espace de travail interactif →
                 </span>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </div>
         ))}
 
         {(!deals || deals.length === 0) && (
