@@ -5,13 +5,12 @@ import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
 import { addTimelineEventAction, deleteTimelineEventAction, saveTimelineOrderAction, updateDealPropertiesAction, toggleTimelineEventCompletionAction } from "@/app/actions";
 
-// Palette colorielle officielle Apple (Fonds ultra-doux + bordures contrastées)
 const appleBlockColors = [
-  { bg: "bg-[#f4f7fe] border-[#0071e3]/20 text-[#0071e3]", focus: "focus:border-[#0071e3]" }, // Bleu océan
-  { bg: "bg-[#fdf4fb] border-[#fa43cd]/20 text-[#fa43cd]", focus: "focus:border-[#fa43cd]" }, // Rose / Magenta demo
-  { bg: "bg-[#fef8f3] border-[#ff9500]/20 text-[#ff9500]", focus: "focus:border-[#ff9500]" }, // Orange audit
-  { bg: "bg-[#f3fbf7] border-[#34c759]/20 text-[#34c759]", focus: "focus:border-[#34c759]" }, // Vert menthe
-  { bg: "bg-[#f7f4fe] border-[#5856d6]/20 text-[#5856d6]", focus: "focus:border-[#5856d6]" }  // Indigo projet
+  { bg: "bg-[#f4f7fe] border-[#0071e3]/20 text-[#0071e3]", focus: "focus:border-[#0071e3]" }, 
+  { bg: "bg-[#fdf4fb] border-[#fa43cd]/20 text-[#fa43cd]", focus: "focus:border-[#fa43cd]" }, 
+  { bg: "bg-[#fef8f3] border-[#ff9500]/20 text-[#ff9500]", focus: "focus:border-[#ff9500]" }, 
+  { bg: "bg-[#f3fbf7] border-[#34c759]/20 text-[#34c759]", focus: "focus:border-[#34c759]" }, 
+  { bg: "bg-[#f7f4fe] border-[#5856d6]/20 text-[#5856d6]", focus: "focus:border-[#5856d6]" }  
 ];
 
 export default function DealWorkspacePage({ params }: { params: Promise<{ dealId: string }> }) {
@@ -206,13 +205,13 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
       </div>
 
       {/* PIPELINE DE PROGRESSION STRATÉGIQUE (ALIGNEMENT PERFECT CORRIGÉ) */}
-      <div className="relative max-w-xl mx-auto py-4">
-        {/* Ligne d'arrière-plan continue grise - Calée à top-5 (centre vertical exact d'un rond de 40px) */}
-        <div className="absolute top-5 left-10 right-10 h-[3px] bg-black/[0.06] z-0 rounded-full" />
+      <div className="relative max-w-xl mx-auto mb-6">
+        {/* Ligne d'arrière-plan continue grise - Alignée à top-[20px] (centre de l'icône w-10) */}
+        <div className="absolute top-[20px] left-[48px] right-[48px] h-[3px] bg-black/[0.06] z-0 rounded-full" />
         
-        {/* Ligne de progression active bleue animée - Alignée à top-5 */}
+        {/* Ligne de progression active bleue animée - Alignée à top-[20px] */}
         <div 
-          className="absolute top-5 left-10 right-10 h-[3px] bg-gradient-to-r from-[#0071e3] to-[#42a5f5] z-0 rounded-full apple-curve shadow-[0_0_12px_rgba(0,113,227,0.3)] origin-left" 
+          className="absolute top-[20px] left-[48px] right-[48px] h-[3px] bg-gradient-to-r from-[#0071e3] to-[#42a5f5] z-0 rounded-full apple-curve shadow-[0_0_12px_rgba(0,113,227,0.3)] origin-left" 
           style={{
             transform: `scaleX(${activeStep === "qualification" ? 0 : activeStep === "estimation" ? 0.5 : 1})`,
             transition: "transform 450ms cubic-bezier(0.16, 1, 0.3, 1)"
@@ -229,7 +228,7 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
           >
             <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
               activeStep === "qualification" 
-                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-105 font-black shadow-sm" 
+                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-105 font-black" 
                 : "bg-[#0071e3] border-[#0071e3] text-white"
             }`}>
               {activeStep === "qualification" ? "1" : "✓"}
@@ -249,7 +248,7 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
           >
             <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
               activeStep === "estimation" 
-                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-105 font-black shadow-sm" 
+                ? "bg-white border-[#0071e3] text-[#0071e3] ring-4 ring-[#0071e3]/10 scale-105 font-black" 
                 : activeStep === "recap"
                   ? "bg-[#0071e3] border-[#0071e3] text-white"
                   : "bg-white border-zinc-200 text-zinc-400"
@@ -271,7 +270,7 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
           >
             <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 apple-curve shadow-md transition-all duration-300 ${
               activeStep === "recap" 
-                ? "bg-gradient-to-tr from-[#0071e3] to-[#42a5f5] border-transparent text-white ring-4 ring-[#0071e3]/10 scale-105 font-black shadow-[0_4px_12px_rgba(0,113,227,0.2)]" 
+                ? "bg-gradient-to-tr from-[#0071e3] to-[#42a5f5] border-transparent text-white ring-4 ring-[#0071e3]/10 scale-105 font-black" 
                 : "bg-white border-zinc-200 text-zinc-400"
             }`}>
               3
@@ -308,7 +307,7 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
             </form>
           </div>
 
-          {/* GESTIONNAIRE DE SUIVI GRAPHIQUE (FRiSE RESTRUCTURÉE POUR LE CENTRAGE) */}
+          {/* GESTIONNAIRE DE SUIVI GRAPHIQUE (ALIGNEMENT PARFAIT DE LA LIGNE ET DU ROND) */}
           <div className="bg-white border border-black/[0.06] rounded-2xl p-8 shadow-sm space-y-6">
             <div>
               <h2 className="text-xl font-bold text-[#1d1d1f]">Plan d'action & Suivi analytique</h2>
@@ -316,9 +315,9 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
             </div>
 
             {timelineEvents.length > 0 ? (
-              <div className="relative pl-8 space-y-6">
-                {/* Ligne verticale continue géométriquement isolée au pixel près */}
-                <div className="absolute top-2 bottom-2 left-[11px] w-[2px] bg-black/[0.08] z-0" />
+              <div className="relative space-y-6">
+                {/* Ligne verticale : alignée de façon stable à left-[7px] */}
+                <div className="absolute top-0 bottom-0 left-[7px] w-[2px] bg-black/[0.08] z-0" />
 
                 {timelineEvents.map((event, index) => {
                   const reminder = getReminderTag(event.event_date, event.completed);
@@ -331,16 +330,16 @@ export default function DealWorkspacePage({ params }: { params: Promise<{ dealId
                       onDragStart={() => handleDragStart(index)}
                       onDragOver={(e) => handleDragOver(e, index)}
                       onDragEnd={handleDragEnd}
-                      className="relative group z-10"
+                      className="relative flex items-start group z-10"
                     >
-                      {/* Rond d'état parfaitement superposé au centre de la ligne et en face de la 1ère ligne de carte (top-[24px]) */}
+                      {/* Rond d'état absolu : w-4 h-4 (16px), centré sur la ligne (left-0), aligné en face de la première ligne de texte (top-[21px]) */}
                       <button
                         onClick={() => handleToggleComplete(event.id, event.completed)}
-                        className={`absolute left-[4px] top-[24px] w-4 h-4 rounded-full border-2 border-white shadow-sm apple-curve z-20 cursor-pointer ${event.completed ? "bg-green-500" : "bg-zinc-300 hover:bg-[#0071e3]"}`}
+                        className={`absolute left-0 top-[21px] w-4 h-4 rounded-full border-2 border-white shadow-sm apple-curve z-20 cursor-pointer ${event.completed ? "bg-green-500" : "bg-zinc-300 hover:bg-[#0071e3]"}`}
                       ></button>
 
-                      {/* Corps de carte décalé (ml-6) pour dégager l'axe de la ligne */}
-                      <div className={`ml-6 border rounded-2xl p-5 flex flex-col gap-4 shadow-sm ${colorConfig.bg} ${event.completed ? "opacity-50" : ""}`}>
+                      {/* Corps de carte décalé proprement par ml-7 pour créer une gouttière d'alignement parfaite */}
+                      <div className={`ml-7 border rounded-2xl p-5 flex flex-col gap-4 shadow-sm flex-1 ${colorConfig.bg} ${event.completed ? "opacity-50" : ""}`}>
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/[0.04] pb-3">
                           <div className="flex items-center gap-3 flex-1 min-w-0">
                             <span className="text-xs bg-white border border-black/[0.05] text-[#1d1d1f] w-6 h-6 rounded-md flex items-center justify-center font-bold shrink-0">
