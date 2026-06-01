@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Focus Deals",
-  description: "Mon outil d'organisation minimaliste",
+  description: "Mon outil d'organisation",
 };
 
 export default function RootLayout({
@@ -28,47 +28,47 @@ export default function RootLayout({
       lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="h-full flex bg-zinc-50 text-zinc-900 overflow-hidden">
+      <body className="h-full flex bg-white text-[#1D1D1F] overflow-hidden selection:bg-blue-200">
         
-        {/* Zone de contenu principale (à gauche) */}
-        <div className="flex-1 flex flex-col h-full">
-          {/* En-tête avec le bouton + */}
-          <header className="h-16 border-b border-zinc-200 bg-white flex items-center justify-between px-8 shrink-0">
-            <h1 className="font-semibold text-lg text-zinc-400">Focus</h1>
-            
-            {/* Le bouton Ajouter */}
-            <button className="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center text-xl hover:bg-zinc-800 transition-colors shadow-sm cursor-pointer">
-              +
-            </button>
-          </header>
-          
-          {/* Contenu de la page (ex: page.tsx) */}
-          <main className="flex-1 overflow-y-auto p-8">
-            {children}
-          </main>
-        </div>
-
-        {/* Sidebar / Menu (à droite) */}
-        <aside className="w-64 bg-white border-l border-zinc-200 flex flex-col shrink-0 h-full">
-          <div className="h-16 flex items-center px-6 border-b border-zinc-200">
-            <h2 className="font-bold text-xl">Menu</h2>
+        {/* Sidebar (Gauche) - Style macOS */}
+        <aside className="w-[260px] bg-[#F5F5F7] border-r border-[#E5E5EA] flex flex-col shrink-0 h-full pt-12 pb-6 px-4">
+          <div className="px-3 mb-6">
+            <h2 className="font-semibold text-[11px] text-[#86868B] uppercase tracking-wider">Organisation</h2>
           </div>
           
-          <nav className="flex-1 p-4 space-y-2">
+          <nav className="flex-1 space-y-1">
             <Link 
               href="/" 
-              className="block px-4 py-2 rounded-lg hover:bg-zinc-100 transition-colors text-zinc-600 hover:text-black"
+              className="flex items-center px-3 py-2 text-[14px] font-medium rounded-md transition-colors text-[#1D1D1F] hover:bg-[#E8E8ED]"
             >
               Dashboard
             </Link>
             <Link 
               href="/deals" 
-              className="block px-4 py-2 rounded-lg bg-zinc-100 font-medium text-black transition-colors"
+              className="flex items-center px-3 py-2 text-[14px] font-medium rounded-md bg-[#E8E8ED] text-[#1D1D1F] transition-colors"
             >
               Mes Deals
             </Link>
           </nav>
         </aside>
+
+        {/* Contenu principal (Droite) */}
+        <div className="flex-1 flex flex-col h-full bg-white relative">
+          
+          {/* Header flottant pour placer le bouton + dans le coin supérieur droit */}
+          <header className="h-16 flex items-center justify-end px-8 w-full absolute top-0 right-0 z-10 pointer-events-none">
+            <button className="pointer-events-auto bg-[#007AFF] text-white w-7 h-7 rounded-full flex items-center justify-center text-xl font-light hover:bg-[#0071E3] transition-all active:scale-95 shadow-sm">
+              +
+            </button>
+          </header>
+          
+          {/* Zone où les pages s'affichent */}
+          <main className="flex-1 overflow-y-auto px-12 pt-20 pb-12">
+            <div className="max-w-4xl mx-auto">
+              {children}
+            </div>
+          </main>
+        </div>
 
       </body>
     </html>
