@@ -7,26 +7,25 @@ export default async function CompteDetailPage({ params }: { params: Promise<{ i
   const resolvedParams = await params;
   const compteId = parseInt(resolvedParams.id, 10);
 
-  if (isNaN(compteId)) {
-    notFound();
-  }
+  if (isNaN(compteId)) notFound();
 
-  const { data: compte } = await supabase
-    .from("comptes")
-    .select("*")
-    .eq("id", compteId)
-    .single();
-
-  if (!compte) {
-    notFound();
-  }
+  const { data: compte } = await supabase.from("comptes").select("*").eq("id", compteId).single();
+  if (!compte) notFound();
 
   const { data: deals } = await supabase
     .from("deals")
     .select("*")
     .eq("compte_id", compteId)
-    .neq("status", "done")
     .order("created_at", { ascending: false });
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'Critical': return 'bg-red-100 text-red-800 border-red-200';
+      case 'High': return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'Medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      default: return 'bg-zinc-100 text-zinc-800 border-zinc-200';
+    }
+  };
 
   return (
     <div className="space-y-10">
@@ -36,55 +35,50 @@ export default async function CompteDetailPage({ params }: { params: Promise<{ i
             ‹ Retour aux comptes
           </Link>
         </div>
-        <div className="space-y-1">
-          <h1 className="text-4xl font-extrabold tracking-tight text-[#1d1d1f]">{compte.name}</h1>
-          <p className="text-[16px] font-medium text-[#86868b]">Suivi analytique des opportunités rattachées.</p>
-        </div>
+        <h1 className="text-4xl font-extrabold tracking-tight text-[#1d1d1f]">{compte.name}</h1>
       </header>
 
       <div className="space-y-6">
+        <h2 className="text-lg font-bold text-[#1d1d1f]">Suivi des Deals en cours</h2>
+        
         {deals?.map((deal: any) => (
-          <div 
-            key={deal.id} 
-            className="bg-white p-6 rounded-2xl border border-black/[0.06] shadow-sm space-y-5 hover:shadow-md apple-curve"
-          >
-            <div className="flex justify-between items-start gap-4">
-              <div className="space-y-2">
-                <h2 className="font-bold text-[22px] tracking-tight text-[#1d1d1f] leading-snug">{deal.subject}</h2>
+          <Link href={`/comptes/deals/${deal.id}`} key={deal.id} className="block group">
+            <div className="bg-white p-6 rounded-2xl border border-black/[0.06] shadow-sm space-y-4 group-hover:border-[#0071e3] apple-curve group-hover:shadow-md">
+              <div className="flex justify-between items-start gap-4">
+                <div className="space-y-1">
+                  <h3 className="font-bold text-[20px] tracking-tight text-[#1d1d1f] group-hover:text-[#0071e3] apple-curve">
+                    {deal.subject}
+                  </h3>
+                  {deal.city && <span className="inline-flex text-[11px] text-[#86868b] font-medium">📍 {deal.city}</span>}
+                </div>
                 
-                {/* Badge de géolocalisation raffiné */}
-                {deal.city && (
-                  <span className="inline-flex items-center text-[11px] font-bold tracking-wider text-[#86868b] bg-black/[0.04] px-2.5 py-1 rounded-md uppercase">
-                    📍 {deal.city}
-                  </span>
-                )}
+                {/* Badge de priorité */}
+                <span className={`text-[11px] px-2.5 py-1 rounded-full font-bold border ${getPriorityColor(deal.priority)}`}>
+                  {deal.priority || 'Medium'}
+                </span>
               </div>
               
-              {/* Badge d'état de l'opportunité */}
-              <span className={`text-[12px] px-3 py-1 rounded-full font-bold border ${
-                deal.status === 'waiting' 
-                  ? 'bg-amber-500/[0.08] text-amber-600 border-amber-500/20' 
-                  : 'bg-[#0071e3]/10 text-[#0071e3] border-transparent'
-              }`}>
-                {deal.status === 'waiting' ? 'En attente' : 'À faire'}
-              </span>
+              <div className="bg-[#f5f5f7] p-4 rounded-xl border border-black/[0.01]">
+                <span className="text-[10px] font-bold text-[#86868b] uppercase tracking-widest block mb-1">
+                  Prochaine étape
+                </span>
+                <p className="text-[#1d1d1f] text-[14px] font-semibold leading-relaxed">
+                  {deal.next_action || "Aucune action définie"}
+                </p>
+              </div>
+              
+              <div className="text-right">
+                <span className="text-xs text-[#0071e3] font-medium opacity-0 group-hover:opacity-100 apple-curve">
+                  Ouvrir l'espace de travail interactif →
+                </span>
+              </div>
             </div>
-            
-            {/* Boite de Prochaine Action - Directement inspirée du modèle */}
-            <div className="bg-[#f5f5f7] p-4 rounded-xl border border-black/[0.02]">
-              <span className="text-[10px] font-bold text-[#86868b] uppercase tracking-widest block mb-1.5">
-                Prochaine étape (Next step)
-              </span>
-              <p className="text-[#1d1d1f] text-[15px] font-semibold leading-relaxed">
-                {deal.next_action || "Aucune action requise de définie"}
-              </p>
-            </div>
-          </div>
+          </Link>
         ))}
 
         {(!deals || deals.length === 0) && (
-          <div className="bg-white rounded-2xl p-12 text-center border border-black/[0.05] shadow-sm">
-            <p className="text-[15px] text-[#86868b] font-medium">Aucun dossier ou deal en cours pour ce compte client.</p>
+          <div className="bg-white rounded-2xl p-12 text-center text-[#86868b] border border-dashed">
+            Aucun deal en cours pour ce compte client.
           </div>
         )}
       </div>

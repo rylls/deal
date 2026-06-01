@@ -5,15 +5,21 @@ import { revalidatePath } from "next/cache";
 
 export async function createCompteAction(formData: FormData) {
   const name = formData.get("name") as string;
-  if (!name) return { error: "Le nom du compte est requis" };
+  const revenue = formData.get("revenue") as string;
+  const sector = formData.get("sector") as string;
+  const primaryContact = formData.get("primary_contact") as string;
+
+  if (!name) return { success: false, error: "Le nom du compte est requis" };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("comptes").insert([{ name }]);
+  const { error } = await supabase.from("comptes").insert([
+    { name, revenue, sector, primary_contact: primaryContact }
+  ]);
 
-  if (error) return { error: error.message };
+  if (error) return { success: false, error: error.message };
 
   revalidatePath("/comptes");
-  return { success: true };
+  return { success: true, error: null };
 }
 
 export async function createDealAction(formData: FormData) {
@@ -22,9 +28,10 @@ export async function createDealAction(formData: FormData) {
   const city = formData.get("city") as string;
   const nextAction = formData.get("next_action") as string;
   const status = formData.get("status") as string || "todo";
+  const priority = formData.get("priority") as string || "Medium";
 
   if (!compteId || !subject) {
-    return { error: "Le compte et le sujet sont obligatoires" };
+    return { success: false, error: "Le compte et le sujet sont obligatoires" };
   }
 
   const supabase = await createClient();
@@ -34,13 +41,54 @@ export async function createDealAction(formData: FormData) {
       subject,
       city,
       next_action: nextAction,
-      status
+      status,
+      priority
     }
   ]);
 
-  if (error) return { error: error.message };
+  if (error) return { success: false, error: error.message };
 
   revalidatePath("/comptes");
   revalidatePath(`/comptes/${compteId}`);
-  return { success: true };
+  return { success: true, error: null };
+}
+
+export async function addTimelineEventAction(dealId: number, action: string, eventDate: string, position: number) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("deal_timeline").insert([
+    { deal_id: dealId, action, event_date: eventDate, position }
+  ]);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath(`/comptes/deals/${dealId}`);
+  return { success: true, error: null };
+}
+
+export async function deleteTimelineEventAction(dealId: number, eventId: number) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("deal_timeline").delete().eq("id", eventId);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath(`/comptes/deals/${dealId}`);
+  return { success: true, error: null };
+}
+
+export async function saveTimelineOrderAction(dealId: number, events: { id: number; action: string; event_date: string; position: number }[]) {
+  const supabase = await createClient();
+  
+  try {
+    for (const event of events) {
+      const { error } = await supabase
+        .from("deal_timeline")
+        .update({ position: event.position, action: event.action, event_date: event.event_date })
+        .eq("id", event.id);
+      
+      if (error) throw error;
+    }
+
+    revalidatePath(`/comptes/deals/${dealId}`);
+    return { success: true, error: null };
+  } catch (e: any) {
+    return { success: false, error: e.message || "Une erreur est survenue lors de la synchronisation" };
+  }
 }
