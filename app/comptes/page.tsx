@@ -4,7 +4,6 @@ import Link from "next/link";
 export default async function ComptesPage() {
   const supabase = await createClient();
   
-  // Récupération des vrais comptes depuis SUPABASE
   const { data: comptes } = await supabase
     .from("comptes")
     .select(`
@@ -15,24 +14,26 @@ export default async function ComptesPage() {
     .order("name");
 
   return (
-    <div className="space-y-8">
-      <header className="border-b pb-4">
-        <h1 className="text-3xl font-bold tracking-tight">Comptes</h1>
-        <p className="text-zinc-500">Gérez vos clients et visualisez vos opportunités.</p>
+    <div className="space-y-12">
+      <header className="space-y-2">
+        <h1 className="text-4xl font-bold tracking-tight text-[#1d1d1f]">Comptes</h1>
+        <p className="text-[17px] text-[#86868b]">Suivez l'état global de vos relations clients.</p>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {comptes?.map((compte: any) => {
           const activeDealsCount = compte.deals?.filter((d: any) => d.status !== "done").length || 0;
 
           return (
-            <Link href={`/comptes/${compte.id}`} key={compte.id}>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-zinc-200 hover:border-[#007AFF] hover:shadow-md transition-all cursor-pointer flex flex-col justify-between h-32">
-                <h2 className="font-semibold text-lg text-zinc-900">{compte.name}</h2>
-                <span className={`text-xs px-2 py-1 rounded-full self-start ${
-                  activeDealsCount > 0 ? 'bg-blue-50 text-blue-700 font-medium' : 'bg-zinc-100 text-zinc-500'
+            <Link href={`/comptes/${compte.id}`} key={compte.id} className="group">
+              <div className="bg-white p-6 rounded-2xl border border-[#d2d2d7]/60 hover:border-[#1d1d1f] flex flex-col justify-between h-36 apple-transition group-hover:shadow-sm">
+                <h2 className="font-semibold text-[19px] tracking-tight text-[#1d1d1f] group-hover:text-[#0071e3] apple-transition">
+                  {compte.name}
+                </h2>
+                <span className={`text-[12px] px-2.5 py-1 rounded-full self-start font-medium tracking-tight ${
+                  activeDealsCount > 0 ? 'bg-[#0071e3]/10 text-[#0071e3]' : 'bg-[#f5f5f7] text-[#86868b]'
                 }`}>
-                  {activeDealsCount} deal{activeDealsCount > 1 ? 's' : ''} en cours
+                  {activeDealsCount} deal{activeDealsCount > 1 ? 's' : ''} actif{activeDealsCount > 1 ? 's' : ''}
                 </span>
               </div>
             </Link>
@@ -40,8 +41,8 @@ export default async function ComptesPage() {
         })}
 
         {(!comptes || comptes.length === 0) && (
-          <div className="col-span-full bg-zinc-50 border border-dashed border-zinc-300 rounded-xl p-8 text-center text-zinc-500">
-            Aucun compte enregistré dans votre base de données. Utilisez le bouton "+" en haut à droite pour ajouter votre premier compte !
+          <div className="col-span-full bg-[#f5f5f7] rounded-2xl p-12 text-center border border-[#d2d2d7]/30">
+            <p className="text-[15px] text-[#86868b]">Aucun compte pour le moment. Cliquez sur le bouton "+" pour commencer.</p>
           </div>
         )}
       </div>
