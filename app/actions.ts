@@ -53,6 +53,37 @@ export async function createDealAction(formData: FormData) {
   return { success: true, error: null };
 }
 
+// ---- NOUVELLE ACTION : METTRE À JOUR LES PROPRIÉTÉS DU DEAL ----
+export async function updateDealPropertiesAction(dealId: number, formData: FormData) {
+  const subject = formData.get("subject") as string;
+  const priority = formData.get("priority") as string;
+  const deadline = formData.get("deadline") as string;
+  const city = formData.get("city") as string;
+  const nextAction = formData.get("next_action") as string;
+  const status = formData.get("status") as string;
+
+  if (!subject) return { success: false, error: "Le sujet du deal ne peut pas être vide." };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("deals")
+    .update({
+      subject,
+      priority,
+      deadline: deadline || null,
+      city: city || null,
+      next_action: nextAction || null,
+      status
+    })
+    .eq("id", dealId);
+
+  if (error) return { success: false, error: error.message };
+
+  revalidatePath(`/comptes/deals/${dealId}`);
+  return { success: true, error: null };
+}
+
+// ---- ACTIONS POUR LA TIMELINE INTERACTIVE ----
 export async function addTimelineEventAction(dealId: number, action: string, eventDate: string, position: number) {
   const supabase = await createClient();
   const { error } = await supabase.from("deal_timeline").insert([
