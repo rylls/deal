@@ -1,5 +1,3 @@
-// uploaded:rylls/deal/deal-main/app/layout.tsx
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
@@ -17,7 +15,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Update metadata to reflect the new brand
 export const metadata: Metadata = {
   title: "Groupe Reej - Focus Deals",
   description: "Outil interne de gestion de deals",
@@ -30,50 +27,70 @@ export default async function RootLayout({
 }>) {
   const supabase = await createClient();
   
+  // Récupération des comptes et des deals pour alimenter les compteurs du menu
   const { data: comptes } = await supabase
     .from("comptes")
-    .select("id, name")
-    .order("name");
+    .select("id, name, deals(id, status)");
+
+  const totalActiveDeals = comptes?.reduce((acc, c) => {
+    const active = c.deals?.filter((d: any) => d.status !== 'done').length || 0;
+    return acc + active;
+  }, 0) || 0;
 
   return (
     <html
       lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="h-full flex bg-white text-[#1d1d1f] overflow-hidden selection:bg-[#0071e3]/20">
+      <body className="h-full flex bg-[#f5f5f7] text-[#1d1d1f] overflow-hidden selection:bg-[#0071e3]/20">
         
-        {/* Sidebar branding updated from 'Focus Workspace' to 'Groupe Reej' */}
-        <aside className="w-[240px] bg-[#f5f5f7] border-r border-[#d2d2d7]/50 flex flex-col shrink-0 h-full pt-14 pb-6 px-4">
-          <div className="px-3 mb-8">
-            <h1 className="text-[17px] font-bold text-[#1d1d1f]">Groupe Reej</h1>
-            <p className="text-[12px] text-[#86868b] font-medium">Focus Deals</p>
+        {/* Sidebar immersive - Design Premium Groupe Reej */}
+        <aside className="w-[250px] bg-[#f5f5f7] border-r border-black/[0.04] flex flex-col shrink-0 h-full pt-14 pb-6 px-4 justify-between">
+          <div className="space-y-8">
+            <div className="px-3">
+              <h1 className="text-[18px] font-black text-[#1d1d1f] tracking-tight">Groupe Reej</h1>
+              <p className="text-[11px] text-[#86868b] font-bold uppercase tracking-widest mt-0.5">Focus Deals</p>
+            </div>
+            
+            <nav className="space-y-1">
+              <Link 
+                href="/" 
+                className="group flex items-center justify-between px-4 py-3 text-[13px] font-bold rounded-xl text-[#1d1d1f] hover:bg-[#0071e3]/5 hover:text-[#0071e3] transition-all duration-200 active:scale-[0.98]"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-[16px] group-hover:rotate-12 transition-transform duration-200">📊</span>
+                  <span>Tableau de bord</span>
+                </div>
+              </Link>
+              
+              <Link 
+                href="/comptes" 
+                className="group flex items-center justify-between px-4 py-3 text-[13px] font-bold rounded-xl text-[#1d1d1f] hover:bg-[#0071e3]/5 hover:text-[#0071e3] transition-all duration-200 active:scale-[0.98]"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-[16px] group-hover:scale-110 transition-transform duration-200">🏢</span>
+                  <span>Comptes clients</span>
+                </div>
+                {totalActiveDeals > 0 && (
+                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-[#0071e3]/10 text-[#0071e3] group-hover:bg-[#0071e3] group-hover:text-white transition-colors duration-200">
+                    {totalActiveDeals}
+                  </span>
+                )}
+              </Link>
+            </nav>
           </div>
-          
-          <nav className="flex-1 space-y-1">
-            {/* Nav links updated with new brand name where applicable */}
-            <Link 
-              href="/" 
-              className="flex items-center px-3 py-2 text-[13px] font-semibold rounded-lg text-[#1d1d1f] hover:bg-[#e8e8ed] apple-transition"
-            >
-              Tableau de bord
-            </Link>
-            <Link 
-              href="/comptes" 
-              className="flex items-center px-3 py-2 text-[13px] font-semibold rounded-lg text-[#1d1d1f] hover:bg-[#e8e8ed] apple-transition"
-            >
-              Comptes clients
-            </Link>
-          </nav>
+
+          <div className="px-3 text-[11px] font-semibold text-[#86868b] border-t border-black/[0.04] pt-4">
+            Pipeline Commerciale v1.2
+          </div>
         </aside>
 
-        {/* Contenu principal */}
-        <div className="flex-1 flex flex-col h-full bg-white relative">
-          
-          {/* Bouton Plus flottant */}
+        {/* Espace de rendu principal */}
+        <div className="flex-1 flex flex-col h-full bg-white relative rounded-l-3xl shadow-2xl border-l border-black/[0.02] mt-2 mb-2 mr-2 overflow-hidden">
           <Header comptes={comptes || []} />
           
-          <main className="flex-1 overflow-y-auto px-16 pt-24 pb-16">
-            <div className="max-w-3xl mx-auto">
+          <main className="flex-1 overflow-y-auto px-16 pt-24 pb-16 bg-[#fafafa]">
+            <div className="max-w-5xl mx-auto">
               {children}
             </div>
           </main>
